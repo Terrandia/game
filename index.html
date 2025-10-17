@@ -400,10 +400,22 @@
           let layer = isUnderworldLayer(y);
           if (layer) {
             let type = "air";
-            if (y === layer.y || y === layer.y + layer.height - 1 || x % 32 === 0 || x % 32 === 31) {
+            // Create the underworld layer structure
+            if (y === layer.y || y === layer.y + layer.height - 1) {
+              // Top and bottom of layer
               type = layer.name;
-            } else if ((x+layer.y)%30 === 0 && y > layer.y && y < layer.y + layer.height - 1) {
-              type = layer.name;
+            } else if (y > layer.y && y < layer.y + layer.height - 1) {
+              // Interior of layer
+              if ((x % 32 === 0 || x % 32 === 31) && y % 5 === 0) {
+                // Add some structure to the walls
+                type = layer.name;
+              } else if (y % 10 === 0 && x % 5 === 0) {
+                // Add some structure to the walls
+                type = layer.name;
+              } else {
+                // Fill with air or keep as air
+                type = "air";
+              }
             }
             // Set background for this layer
             setBackground(x, y, layer.bg);
